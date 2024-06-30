@@ -56,30 +56,34 @@ STAGES = {
 
 class OHEncoder:
 
-    def __init__(self, categories=np.array(['A', 'C', 'G', 'T'])):
-        self.encoder = Encoder(sparse=False, categories=[categories])
+    def __init__(self, categories=np.array(['A', 'C', 'G', 'T']), noise=True, verbose=True):
+        self.noise = noise
+        self.verbose = verbose
+        self.encoder = Encoder(sparse=False, categories=[categories], handle_unknown='ignore', dtype=np.int8)
         self.dictionary = categories
         self.encoder.fit(categories.reshape(-1, 1))
-
+		
     def __call__(self, seq, info=False):
         seq = list(seq)
         if 'N' in seq:
             pos = [i for i, el in enumerate(seq) if el == 'N']
-            if len(pos) <= 0.05*len(seq):
-                if info:
-                    print('{} unknown position(s) in given sequence - changed to random one(s)'.format(len(pos)))
-                for p in pos:
-                    seq[p] = random.choice(self.dictionary)
+            if len(pos) <= 0.99*len(seq):
+                if self.noise:             
+                    for p in pos:
+                        seq[p] = random.choice(self.dictionary)
+                    if self.verbose:
+                        print('{} unknown position(s) in given sequence - changed to random one(s)'.format(len(pos)))    
+                else:
+                    if self.verbose:
+                        print('{} unknown position(s) in given sequence'.format(len(pos)))  
             else:
-                return None
+                return None        
+
         if info:
             return True
-        else:
+        else:          
             s = np.array(seq).reshape(-1, 1)
             return self.encoder.transform(s).T
-
-    def decode(self, array):
-        return ''.join([el[0] for el in self.encoder.inverse_transform(array.T)])
 
 
 def make_chrstr(chrlist):

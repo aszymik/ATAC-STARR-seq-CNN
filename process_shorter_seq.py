@@ -21,6 +21,8 @@ def cut_sequence(seq, length):
 
 
 def elongate_sequence(seq, length):
+    """ Pads sequence with N values"""
+
     assert length >= len(seq)
     n = (2000 - len(seq)) // 2
 
@@ -39,13 +41,12 @@ def convert_to_specified_length(seq, length=2000):
     return seq
 
 
-def process_fasta_to_specified_length(length, input_path, output_path, lengths=[]):
+def process_fasta_to_specified_length(length, input_path, output_path):
     assert(length % 2 == 0)
     lines = process_fasta_to_list(input_path)
 
     for i in range(len(lines)):
         if lines[i][0] != '>':
-            lengths.append(len(lines[i]))
             # Convert sequences to given length
             lines[i] = convert_to_specified_length(lines[i], length)
 
@@ -78,6 +79,8 @@ def original_length_to_2kb(input_path, output_path, min_length=1):
 
 
 def filter_length(length, input_path):
+    """ Counts sequences longer than specified length """
+
     lines = []
     filtered = []
 
@@ -96,6 +99,7 @@ def filter_length(length, input_path):
 
 
 def get_lengths(input_path, min_length=1):
+    """ Returns sequence lenghts from a fasta file """
     lengths = []
     # Process fasta so that each sequence is in one line
     lines = process_fasta_to_list(input_path)
@@ -114,6 +118,8 @@ def get_lengths(input_path, min_length=1):
 
 
 def get_icdf(lengths):
+    """ Calculates icdf, divided into sequences longer and shorter than 2000 """
+
     assert len(lengths) > 0
     under_2000 = [length for length in lengths if length < 2000]
     over_2000_ratio = (len(lengths) - len(under_2000)) / len(lengths)
@@ -137,16 +143,10 @@ def get_icdf(lengths):
     return icdf, over_2000_ratio
 
 
-def blocked_gauss(mu, sigma, n):
-    numbers = []
-    while len(numbers) < n:
-        numb = random.gauss(mu, sigma)
-        if (numb > 0 and numb < 1):
-            numbers.append(numb)
-    return numbers
-
-
 def get_sample_from_distribution(n, lengths, exact=False, seed=0):
+    """ Imitates a given length distribution from lengths list 
+        If exact: sampling from the list, else: using ICDF
+    """
     if not exact:
         icdf, over_2000_ratio = get_icdf(lengths)
         over_2000_count = int(over_2000_ratio * n)
@@ -170,6 +170,9 @@ def get_sample_from_distribution(n, lengths, exact=False, seed=0):
 
 
 def create_subsets(input_path, output_path, size=None, lengths=None):
+    """ Creates a subset of the given size of data from the FASTA file, 
+        if a list of sequence lengths is given, changes the sequence lengths accordingly 
+    """
     records = list(SeqIO.parse(input_path, "fasta"))
     data = [record for record in records]
 

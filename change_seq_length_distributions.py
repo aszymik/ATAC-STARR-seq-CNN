@@ -3,6 +3,7 @@ import numpy as np
 import random
 from scipy.interpolate import interp1d
 from Bio import SeqIO
+from pad_fasta_with_Ns import pad_with_Ns
 
 
 def count_sequences_in_fasta(input_path):
@@ -15,17 +16,6 @@ def cut_sequence(seq, length):
     return seq[n:n + length]
 
 
-def pad_with_Ns(seq, length):
-    assert length >= len(seq)
-    n = (2000 - len(seq)) // 2
-
-    if len(seq) % 2 == 1:
-        seq = n*'N' + seq + (n+1)*'N'
-    else:
-        seq = n*'N' + seq + n*'N'
-    return seq
-
-
 def convert_to_specified_length(seq, length=2000):
     if len(seq) > length:
         seq = cut_sequence(seq, length)
@@ -35,15 +25,15 @@ def convert_to_specified_length(seq, length=2000):
 
 
 def get_lengths(input_path, min_length=1):
-    """Returns sequence lenghts from a fasta file"""
+    """Returns sequence lenghts from a fasta file longer than min_length"""
     lengths = []
 
     for record in SeqIO.parse(input_path, 'fasta'):
         sequence = str(record.seq)
-        trimmed_sequence = sequence.strip('N')  # not counting 'N' padding a sequence
+        trimmed_sequence = sequence.strip('N')  # not counting 'N's padding a sequence
         if len(trimmed_sequence) > 2000:
             lengths.append(2000)
-        else:
+        elif len(trimmed_sequence) < min_length:  
             lengths.append(len(trimmed_sequence))
     return lengths
 

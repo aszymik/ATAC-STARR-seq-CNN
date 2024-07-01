@@ -5,13 +5,8 @@ from scipy.interpolate import interp1d
 from Bio import SeqIO
 
 
-def process_fasta_to_list(input_path):
-    records = list(SeqIO.parse(input_path, 'fasta'))
-    lines = []
-    for record in records:
-        lines.append(f'>{record.id}\n')
-        lines.append(str(record.seq))
-    return lines
+def count_sequences_in_fasta(input_path):
+    return sum(1 for _ in SeqIO.parse(input_path, 'fasta'))
 
 
 def cut_sequence(seq, length):
@@ -20,16 +15,14 @@ def cut_sequence(seq, length):
     return seq[n:n + length]
 
 
-def elongate_sequence(seq, length):
-    """ Pads sequence with N values"""
-
+def pad_with_Ns(seq, length):
     assert length >= len(seq)
     n = (2000 - len(seq)) // 2
 
     if len(seq) % 2 == 1:
-        seq = n * 'N' + seq + (n + 1) * 'N'
+        seq = n*'N' + seq + (n+1)*'N'
     else:
-        seq = n * 'N' + seq + n * 'N'
+        seq = n*'N' + seq + n*'N'
     return seq
 
 
@@ -37,89 +30,26 @@ def convert_to_specified_length(seq, length=2000):
     if len(seq) > length:
         seq = cut_sequence(seq, length)
     else:
-        seq = elongate_sequence(seq, length)
+        seq = pad_with_Ns(seq, length)
     return seq
 
 
-def process_fasta_to_specified_length(length, input_path, output_path):
-    assert(length % 2 == 0)
-    lines = process_fasta_to_list(input_path)
-
-    for i in range(len(lines)):
-        if lines[i][0] != '>':
-            # Convert sequences to given length
-            lines[i] = convert_to_specified_length(lines[i], length)
-
-    # Elongate each sequence to 2 kb
-    for i in range(len(lines)):
-        if lines[i][0] != '>':
-            lines[i] = convert_to_specified_length(lines[i], 2000) + '\n'
-
-    # Write output
-    with open(output_path, 'w') as output_file:
-        for line in lines:
-            output_file.write(line)
-
-
-def original_length_to_2kb(input_path, output_path, min_length=1):
-    filelines = process_fasta_to_list(input_path)
-    lines = []
-
-    for i in range(len(filelines)):
-        if filelines[i][0] != '>':
-
-            if len(filelines[i]) >= min_length:
-                # Accept only the sequences at least 200 bp long
-                lines.append(filelines[i - 1])
-                lines.append(convert_to_specified_length(filelines[i], 2000) + '\n')
-
-    with open(output_path, 'w') as output_file:
-        for line in lines:
-            output_file.write(line)
-
-
-def filter_length(length, input_path):
-    """ Counts sequences longer than specified length """
-
-    lines = []
-    filtered = []
-
-    f = open(input_path, 'r')
-    filelines = f.read().split('>')
-    f.close()
-
-    print(f'Before filtering: {len(filelines)}')
-
-    lines = process_fasta_to_list(input_path)
-    for i in range(len(lines)):
-        if len(lines[i][1]) >= length:
-            filtered.append(lines[i])
-
-    print(f'After filtering: {len(filtered)}')
-
-
 def get_lengths(input_path, min_length=1):
-    """ Returns sequence lenghts from a fasta file """
+    """Returns sequence lenghts from a fasta file"""
     lengths = []
-    # Process fasta so that each sequence is in one line
-    lines = process_fasta_to_list(input_path)
-    beg = 1 if lines[0] == '' else 0
-    end = len(lines) - 1 if lines[-1] == '' else len(lines)
 
-    # Write out sequence lengths
-    for i in range(beg, end):
-        if lines[i][0] != '>':
-            if len(lines[i]) >= min_length:
-                if len(lines[i]) > 2000:
-                    lengths.append(2000)
-                else:
-                    lengths.append(len(lines[i]))
+    for record in SeqIO.parse(input_path, 'fasta'):
+        sequence = str(record.seq)
+        trimmed_sequence = sequence.strip('N')  # not counting 'N' padding a sequence
+        if len(trimmed_sequence) > 2000:
+            lengths.append(2000)
+        else:
+            lengths.append(len(trimmed_sequence))
     return lengths
 
 
 def get_icdf(lengths):
-    """ Calculates icdf, divided into sequences longer and shorter than 2000 """
-
+    """Calculates icdf, divided into sequences longer and shorter than 2000"""
     assert len(lengths) > 0
     under_2000 = [length for length in lengths if length < 2000]
     over_2000_ratio = (len(lengths) - len(under_2000)) / len(lengths)
@@ -169,33 +99,34 @@ def get_sample_from_distribution(n, lengths, exact=False, seed=0):
     return chosen_lengths
 
 
-def create_subsets(input_path, output_path, size=None, lengths=None):
+def create_subsets(input_path, output_path, size=None, lengths=None, seed=0):
     """ Creates a subset of the given size of data from the FASTA file, 
         if a list of sequence lengths is given, changes the sequence lengths accordingly 
     """
-    records = list(SeqIO.parse(input_path, "fasta"))
-    data = [record for record in records]
+    data = list(SeqIO.parse(input_path, "fasta"))
 
     if not size:
         size = len(data) if lengths is None else len(lengths)
 
+    # Choose random sequence indices
     all_indices = np.arange(len(data))
-    np.random.seed(0)
+    np.random.seed(seed)
     indices = np.random.choice(all_indices, size=size, replace=False)
     indices.sort()
 
-    testset = []
+    subset = []
     for i in range(size):
+        record = data[indices[i]]
         if lengths is None:
-            testset.append(data[indices[i]])
+            subset.append(record)
         else:
-            seq = convert_to_specified_length(str(data[indices[i]].seq), lengths[i])
+            seq = convert_to_specified_length(str(record.seq), lengths[i])
             seq = convert_to_specified_length(seq, 2000)
-            testset.append(data[indices[i]])
-            testset[-1].seq = seq
+            subset.append(record)
+            subset[-1].seq = seq
 
     with open(output_path, 'w') as output_file:
-        SeqIO.write(testset, output_file, "fasta")
+        SeqIO.write(subset, output_file, 'fasta')
 
 
 if __name__ == '__main__':
@@ -220,14 +151,13 @@ if __name__ == '__main__':
     combined_lengths = []
  
     # Process each reference file in terms of sequence lengths
-    for input_path in reference_paths:
-        original_length_to_2kb(input_path, output_path, min_length)
-        lengths = get_lengths(input_path, min_length)
+    for ref_path in reference_paths:
+        lengths = get_lengths(ref_path, min_length)
         combined_lengths.extend(lengths)
 
-    if subset_size:
-        subset_lengths = get_sample_from_distribution(subset_size, combined_lengths, exact=exact)
-        create_subsets(input_path, output_path, size=subset_size, lengths=subset_lengths)
-    else:
-        process_fasta_to_specified_length(length, input_path, output_path)
+    if not subset_size:
+        subset_size = count_sequences_in_fasta(input_path)
+
+    subset_lengths = get_sample_from_distribution(subset_size, combined_lengths, exact=exact)
+    create_subsets(input_path, output_path, size=subset_size, lengths=subset_lengths)
 

@@ -33,7 +33,7 @@ def get_lengths(input_path, min_length=1):
         trimmed_sequence = sequence.strip('N')  # not counting 'N's padding a sequence
         if len(trimmed_sequence) > 2000:
             lengths.append(2000)
-        elif len(trimmed_sequence) < min_length:  
+        elif len(trimmed_sequence) > min_length:  
             lengths.append(len(trimmed_sequence))
     return lengths
 

@@ -1,2 +1,4 @@
+.gitignore
 .DS_Store
 __pycache__/
+preprocess_fasta.py

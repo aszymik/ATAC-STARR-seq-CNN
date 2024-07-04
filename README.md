@@ -1,24 +1,15 @@
-### Using convolution neural networks (CNN) for better understanding of human genome
+## Using convolution neural networks (CNN) for better understanding of human genome
 
-<br></br>
+This project constitutes a convolutional neural network for predicting regulatory regions in a multi-class classification task.
+It is an extension of https://github.com/marnifora/magisterka.
 
-**This repository is a part of my master's project called "Identification of 
-chromatin regions active in human brain using neural networks".**
-
-<br></br>
-
-### Versions
-
-- Python 3.6
-- pandas 1.0.1
-- numpy 1.18.1
-- pytorch 1.3.1
-
-<br></br>
-
-### Example dataset
+### Example models
 
 Example of trained networks are in */data/custom40* and */data/alt1* directories.
+
+### Example data
+
+Sample data containing longer sequences from ChIP-seq experiments are located in *data/test_fasta* folder, while data with shorter transcriptionally active regions from ATAC-STARR-seq are located in *data/test_shorter_seq* directory.
 
 
 **Training an existing network on new samples**

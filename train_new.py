@@ -24,6 +24,7 @@ from new_parser import *
 batch_size, num_workers, num_epochs, acc_threshold, seq_len = args.batch_size, args.num_workers, args.num_epochs, args.acc_threshold, args.seq_len
 
 seed=args.seed
+output = args.output
 #path, output, namespace, seed = parse_arguments(args, namesp=namespace)
 
 

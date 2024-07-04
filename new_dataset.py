@@ -23,7 +23,7 @@ class SeqsDataset(Dataset):
     valid_chroms and test chroms are validation and test chromosomes - will be set aside
 
     """
-    def __init__(self,f_prefix="ATAC" ,train_chr=TRAIN_CHR,valid_chr=VALID_CHR,test_chr=TEST_CHR):
+    def __init__(self,f_prefix="ATAC", train_chr=TRAIN_CHR, valid_chr=VALID_CHR, test_chr=TEST_CHR, noise=True):
         
         self.classes = CLASSES 
         self.num_classes = len(self.classes)
@@ -37,7 +37,7 @@ class SeqsDataset(Dataset):
         self.seq_len=2000
 
 
-        OHE=OHEncoder()
+        OHE=OHEncoder(noise=noise)
         curr_id=0
         EncSeqs = {}
         for cl,sufix in class_sufixes.items():

@@ -62,7 +62,8 @@ t0 = time()
 # CUDA for PyTorch
 use_cuda, device = check_cuda(logger)
 
-dataset = SeqsDataset(f_prefix=args.path+"/"+args.prefix)
+noise = not args.no_random_noise
+dataset = SeqsDataset(f_prefix=args.path+"/"+args.prefix, noise=noise)
 num_classes = dataset.num_classes
 classes = dataset.classes
 

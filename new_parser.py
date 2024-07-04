@@ -45,6 +45,8 @@ parser.add_argument('--weight-decay', action='store', metavar='FLOAT', type=floa
                     help='Weight decay, default value is 0.0001')
 parser.add_argument('--momentum', action='store', metavar='FLOAT', type=float, default=0.1,
                     help='Momentum, default value is 0.1')
+parser.add_argument('--no_random_noise', action='store_true',
+                    help='Not replacing Ns in the sequence with random nucleotides, default: False')
 
 args = parser.parse_args()
 

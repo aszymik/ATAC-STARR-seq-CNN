@@ -143,14 +143,14 @@ As the output new directory with plots is created.
 To prepare network input from example shorter sequences, run:
 
 ```
-python3 pad_fasta_with_Ns.py  data/shorter_seq_test/shorter_seq_pa.fa  OUTPUT_PATH
+python3 pad_fasta_with_Ns.py  data/test_shorter_seq/shorter_seq_pa.fa  OUTPUT_PATH
 ```
 You can specify the minimum sequence length to be included as well as the target sequence length using the `--min_length` and `--output_length` arguments.
 
 
 To truncate longer sequences to a given length and pad them with Ns, run:
 ```
-python3 create_shorter_seq.py  data/shorter_seq_test/2000bp_pi.fa  OUTPUT_PATH \
+python3 create_shorter_seq.py  data/test_shorter_seq/2000bp_pi.fa  OUTPUT_PATH \
         -l DESIRED_LENGTH
 ```
 
@@ -159,13 +159,20 @@ To shorten longer sequences heterogeneously, based on the distribution of other 
 Its arguments include:
 ```
   --reference           FASTA file paths of which distribution is to be mimicked (at least one is required)
-  --input INPUT         Input FASTA file path (an example is *data/shorter_seq_test/2000bp_pi.fa*)
+  --input INPUT         Input FASTA file path (an example is *data/test_shorter_seq/2000bp_pi.fa*)
   --output OUTPUT       Output FASTA file path
   --length LENGTH       Target output length for sequences
   --min_length          Minimum length for sequences to be included
   --subset_size         Size of the subset to create
-  --exact               If true, samples from exact lengths from distribution, otherwise from calculated \
+  --exact               If true, samples from exact lengths from distribution, otherwise from calculated
                         inverse cumulative distribution function; default: True
 ```
 
+Example run:
+```
+python3 change_seq_length_distributions.py \
+        -r data/test_shorter_seq/shorter_seq_pa.fa data/test_shorter_seq/shorter_seq_na.fa \
+        -i data/test_shorter_seq/2000bp_pi.fa \
+        -o data/my_output.fa
+```
 

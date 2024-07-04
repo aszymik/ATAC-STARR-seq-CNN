@@ -1,5 +1,6 @@
 import argparse
 from Bio import SeqIO
+from Bio.Seq import Seq
 
 
 def pad_with_Ns(seq, output_length=2000):
@@ -21,7 +22,7 @@ def pad_fasta_and_filter_shortest(input_path, output_path, min_length=1, output_
         if len(record.seq) >= min_length:
             seq = pad_with_Ns(str(record.seq), output_length=output_length)
             records_filtered.append(record)
-            records_filtered[-1].seq = seq
+            records_filtered[-1].seq = Seq(seq)
 
     with open(output_path, 'w') as output_file:
         SeqIO.write(records_filtered, output_file, 'fasta')

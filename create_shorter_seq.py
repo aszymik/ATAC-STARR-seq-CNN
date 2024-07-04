@@ -13,7 +13,7 @@ def process_fasta_to_specified_length(length, input_path, output_path):
 
     # Elongate each sequence to 2 kb, by padding with Ns
     for i, record in enumerate(records):
-            records[i].seq = convert_to_specified_length(record.seq, 2000) + '\n'
+            records[i].seq = convert_to_specified_length(record.seq, 2000)
 
     # Write output to file
     with open(output_path, 'w') as output_file:

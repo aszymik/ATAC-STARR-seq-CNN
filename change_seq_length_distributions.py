@@ -3,6 +3,7 @@ import numpy as np
 import random
 from scipy.interpolate import interp1d
 from Bio import SeqIO
+from Bio.Seq import Seq
 from pad_fasta_with_Ns import pad_with_Ns
 
 
@@ -113,7 +114,7 @@ def create_subsets(input_path, output_path, size=None, lengths=None, seed=0):
             seq = convert_to_specified_length(str(record.seq), lengths[i])
             seq = convert_to_specified_length(seq, 2000)
             subset.append(record)
-            subset[-1].seq = seq
+            subset[-1].seq = Seq(seq)
 
     with open(output_path, 'w') as output_file:
         SeqIO.write(subset, output_file, 'fasta')
@@ -121,9 +122,9 @@ def create_subsets(input_path, output_path, size=None, lengths=None, seed=0):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description="Process and manipulate FASTA files.")
-    parser.add_argument('--reference', type=str, nargs='+', required=True, help='FASTA file paths of which distribution will be mimicked (at least one required)')
-    parser.add_argument('--input', type=str, required=True, help='Input FASTA file path')
-    parser.add_argument('--output', type=str, required=True, help='Output FASTA file path')
+    parser.add_argument('-r', '--reference', type=str, nargs='+', required=True, help='FASTA file paths of which distribution will be mimicked (at least one required)')
+    parser.add_argument('-i', '--input', type=str, required=True, help='Input FASTA file path')
+    parser.add_argument('-o', '--output', type=str, required=True, help='Output FASTA file path')
     parser.add_argument('--length', type=int, default=2000, help='Target output length for sequences')
     parser.add_argument('--min_length', type=int, default=1, help='Minimum length for sequences to be included')
     parser.add_argument('--subset_size', type=int, default=0, help='Size of the subset to create. Default takes all sequences from the input file.')

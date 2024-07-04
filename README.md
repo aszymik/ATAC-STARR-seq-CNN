@@ -1,27 +1,25 @@
-### Using convolution neural networks (CNN) for better understanding of human genome
+## Using convolution neural networks (CNN) for better understanding of human genome
 
-<br></br>
-
-**This repository is a part of my master's project called "Identification of 
-chromatin regions active in human brain using neural networks".**
-
-<br></br>
+This project constitutes a convolutional neural network for predicting regulatory regions in a multi-class classification task.
+It is an extension of https://github.com/marnifora/magisterka repository.
 
 ### Versions
+Python 3.10
 
-- Python 3.6
-- pandas 1.0.1
-- numpy 1.18.1
-- pytorch 1.3.1
+All packages versions can be found in *requirements.txt* file.
 
-<br></br>
 
-### Example dataset
+### Example models
 
 Example of trained networks are in */data/custom40* and */data/alt1* directories.
 
 
-**Training an existing network on new samples**
+### Example data
+
+Sample data containing longer sequences from ChIP-seq experiments are located in *data/test_fasta* folder, while data with shorter transcriptionally active regions from ATAC-STARR-seq are located in *data/test_shorter_seq* directory.
+
+
+### Training an existing network on new samples
 
 To re-train a network on newly available data, you can use the *train_new.py* script.
 
@@ -78,7 +76,7 @@ for this we assume that you have 4 fasta files in the *data/my_fasta* folder and
 
 
 
-**Calculating the outputs for a full fasta file**
+### Calculating the outputs for a full fasta file
 
 If you just want to obtain the output of a network processing a fasta file, you can use the following command:
 
@@ -91,8 +89,8 @@ You need to specify the network model, input fasta file and output text file nam
 
 
 
-**Calculating integrated gradients**
-<br></br>
+### Calculating integrated gradients
+
 To calculate integrads based on example model and set of sequences just run:
 
 ```
@@ -118,8 +116,8 @@ Inside there are result files:
 - integrads_all.npy - numpy array with calculated gradients
 - params.txt - file with parameters of the analysis
 
-**Plotting seqlogos**
-<br></br>
+### Plotting seqlogos
+
 To plot seqlogos based on the calculated integrads run:
 ```
 python3 plot_seqlogo.py \

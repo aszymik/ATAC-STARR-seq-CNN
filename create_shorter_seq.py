@@ -22,9 +22,9 @@ def process_fasta_to_specified_length(length, input_path, output_path):
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Process a FASTA file to a specified sequence length and pad sequences to 2 kb.')
-    parser.add_argument('length', type=int, help='Length to which sequences should be converted (must be even).')
     parser.add_argument('input_path', type=str, help='Path to the input FASTA file.')
     parser.add_argument('output_path', type=str, help='Path to the output FASTA file.')
+    parser.add_argument('-l', '--length', type=int, help='Length to which sequences should be converted (must be even).')
 
     args = parser.parse_args()
     process_fasta_to_specified_length(args.length, args.input_path, args.output_path)

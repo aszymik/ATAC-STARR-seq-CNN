@@ -124,10 +124,10 @@ if __name__ == '__main__':
     parser.add_argument('--reference', type=str, nargs='+', required=True, help='FASTA file paths of which distribution will be mimicked (at least one required)')
     parser.add_argument('--input', type=str, required=True, help='Input FASTA file path')
     parser.add_argument('--output', type=str, required=True, help='Output FASTA file path')
-    parser.add_argument('--length', type=int, default=2000, help='Target length for sequences')
+    parser.add_argument('--length', type=int, default=2000, help='Target output length for sequences')
     parser.add_argument('--min_length', type=int, default=1, help='Minimum length for sequences to be included')
-    parser.add_argument('--subset_size', type=int, help='Size of the subset to create')
-    parser.add_argument('--exact', action='store_true', help='Use exact lengths from distribution')
+    parser.add_argument('--subset_size', type=int, default=0, help='Size of the subset to create. Default takes all sequences from the input file.')
+    parser.add_argument('--exact', action='store_true', help='If true, samples from exact lengths from distribution, otherwise from calculated inverse cumulative distribution function. Default: True')
     args = parser.parse_args()
 
     reference_paths = args.reference

@@ -3,9 +3,15 @@
 This project constitutes a convolutional neural network for predicting regulatory regions in a multi-class classification task.
 It is an extension of https://github.com/marnifora/magisterka repository.
 
+### Versions
+Python 3.10
+All packages versions can be found in *requirements.txt* file.
+
+
 ### Example models
 
 Example of trained networks are in */data/custom40* and */data/alt1* directories.
+
 
 ### Example data
 

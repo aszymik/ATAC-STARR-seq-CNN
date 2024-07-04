@@ -64,6 +64,7 @@ options:
   --dropout-fc FLOAT    Dropout of fully-connected layers, default value is 0.5
   --weight-decay FLOAT  Weight decay, default value is 0.0001
   --momentum FLOAT      Momentum, default value is 0.1
+  --no_random_noise     Not replacing Ns in the sequence with random nucleotides, default: False
 ```
 
 If we just want to use a different fasta files, without modifying the training params, you can simply run:
@@ -153,7 +154,7 @@ python3 create_shorter_seq.py  data/shorter_seq_test/2000bp_pi.fa  OUTPUT_PATH \
         -l DESIRED_LENGTH
 ```
 
-To shorten longer sequences heterogeneously, based on the distribution of other sequences set, run the *change_seq_length_distributions.py* script.
+To shorten longer sequences heterogeneously, based on the distribution of other sequences set, run the `change_seq_length_distributions.py` script.
 
 Its arguments include:
 ```

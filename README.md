@@ -5,6 +5,7 @@ It is an extension of https://github.com/marnifora/magisterka repository.
 
 ### Versions
 Python 3.10
+
 All packages versions can be found in *requirements.txt* file.
 
 

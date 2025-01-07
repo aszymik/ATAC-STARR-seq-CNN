@@ -165,9 +165,9 @@ To shorten longer sequences heterogeneously, based on the distribution of other 
 Its arguments include:
 ```
   --reference           FASTA file paths of which distribution is to be mimicked (at least one is required)
-  --input INPUT         Input FASTA file path (an example is *data/test_shorter_seq/2000bp_pi.fa*)
-  --output OUTPUT       Output FASTA file path
-  --length LENGTH       Target output length for sequences
+  --input               Input FASTA file path (an example is *data/test_shorter_seq/2000bp_pi.fa*)
+  --output              Output FASTA file path
+  --length              Target output length for sequences
   --min_length          Minimum length for sequences to be included
   --subset_size         Size of the subset to create
   --exact               If true, samples from exact lengths from distribution, otherwise from calculated
@@ -184,5 +184,5 @@ python3 change_seq_length_distributions.py \
 
 -----
 ## References
-1. Osipowicz, M. (2021). Identification of chromatin regions active in human brain using neural networks. *Master’s thesis, Uniwersytet Warszawski Wydział Matem- atyki, Informatyki i Mechaniki, Warszawa.*
+1. Osipowicz, M. (2021). Identification of chromatin regions active in human brain using neural networks. *Master’s thesis, Uniwersytet Warszawski Wydział Matematyki, Informatyki i Mechaniki, Warszawa.*
 

@@ -6,7 +6,8 @@ It is an extension of https://github.com/marnifora/magisterka and https://github
 The network classifies DNA sequences into four classes: promoter active, nonpromoter active, promoter inactive and nonpromoter inactive.
 
 ![Network architecture](images/architecture.png)
-*Network architecture. Adapted from [1].*
+*<sup><sub>Network architecture. Adapted from [1].</sub></sup>*
+
 
 ### Versions
 Python 3.10

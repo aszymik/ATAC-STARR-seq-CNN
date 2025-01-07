@@ -125,6 +125,8 @@ Inside there are result files:
 
 ### Plotting seqlogos
 
+![Example seqlogo](images/seqlogo.png)
+
 To plot seqlogos based on the calculated integrads run:
 ```
 python3 plot_seqlogo.py \

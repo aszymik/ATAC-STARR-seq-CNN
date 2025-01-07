@@ -1,4 +1,4 @@
-## Using convolution neural networks (CNN) for better understanding of human genome
+# Using convolution neural networks (CNN) for better understanding of human genome
 
 This project constitutes a convolutional neural network for predicting regulatory regions in a multi-class classification task.
 It is an extension of https://github.com/marnifora/magisterka and https://github.com/regulomics/RegSeqNet repositories.

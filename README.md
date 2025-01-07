@@ -3,6 +3,11 @@
 This project constitutes a convolutional neural network for predicting regulatory regions in a multi-class classification task.
 It is an extension of https://github.com/marnifora/magisterka and https://github.com/regulomics/RegSeqNet repositories.
 
+The network classifies DNA sequences into four classes: promoter active, nonpromoter active, promoter inactive and nonpromoter inactive.
+
+![Network architecture](images/architecture.png)
+*Network architecture. Adapted from [1].*
+
 ### Versions
 Python 3.10
 
@@ -175,4 +180,8 @@ python3 change_seq_length_distributions.py \
         -i data/test_shorter_seq/2000bp_pi.fa \
         -o data/my_output.fa
 ```
+
+-----
+## References
+1. Osipowicz, M. (2021). Identification of chromatin regions active in human brain using neural networks. *Master’s thesis, Uniwersytet Warszawski Wydział Matem- atyki, Informatyki i Mechaniki, Warszawa.*
 
